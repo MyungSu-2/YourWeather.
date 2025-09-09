@@ -35,6 +35,7 @@ struct HomeView: View {
                 Spacer()
             }
             .padding()
+            .foregroundColor(.primary)
         }
     }
 }
