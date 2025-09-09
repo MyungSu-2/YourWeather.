@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 // MARK: - 날씨 정보 표시 카드 뷰
 // 개별 지역의 날씨 정보를 표시하는 뷰
@@ -13,6 +14,7 @@ struct WeatherInfoCardView: View {
     @Binding var location: String?
     @Binding var locationKor: String?
     @State var viewModel: WeatherViewModel = WeatherViewModel()
+    var weatherInfoFlag: Bool = false
     
     var body: some View {
         NavigationLink {
@@ -71,6 +73,15 @@ struct WeatherInfoCardView: View {
         .onChange(of: location) {
             if let location = location {
                 viewModel.cityName = location
+                viewModel.saveWeatherToSharedDefaults(to: weatherInfoFlag)
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+        }
+        .onAppear {
+            if let location = location {
+                viewModel.cityName = location
+                viewModel.saveWeatherToSharedDefaults(to: weatherInfoFlag)
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }

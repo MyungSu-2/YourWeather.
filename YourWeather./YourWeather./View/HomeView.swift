@@ -21,7 +21,7 @@ struct HomeView: View {
                         .fontWeight(.bold)
                     Spacer()
                 }
-                WeatherInfoCardView(location: $viewModel.myLocation, locationKor: $viewModel.myLocationKor)
+                WeatherInfoCardView(location: $viewModel.myLocation, locationKor: $viewModel.myLocationKor, weatherInfoFlag: false)
                 Divider()
                     .padding(.vertical, 10)
                 
@@ -32,7 +32,7 @@ struct HomeView: View {
                         .fontWeight(.bold)
                     Spacer()
                 }
-                WeatherInfoCardView(location: $viewModel.selectedLocation, locationKor: $viewModel.selectedLocationKor)
+                WeatherInfoCardView(location: $viewModel.selectedLocation, locationKor: $viewModel.selectedLocationKor, weatherInfoFlag: true)
                 Spacer()
             }
             .padding()
@@ -40,8 +40,14 @@ struct HomeView: View {
             .onChange(of: viewModel.myLocation) {
                 UserDefaults.standard.set(viewModel.myLocation, forKey: "myLocation")
             }
+            .onChange(of: viewModel.myLocationKor) {
+                UserDefaults.standard.set(viewModel.myLocationKor, forKey: "myLocationKor")
+            }
             .onChange(of: viewModel.selectedLocation) {
                 UserDefaults.standard.set(viewModel.selectedLocation, forKey: "selectedLocation")
+            }
+            .onChange(of: viewModel.selectedLocationKor) {
+                UserDefaults.standard.set(viewModel.selectedLocationKor, forKey: "selectedLocationKor")
             }
         }
     }

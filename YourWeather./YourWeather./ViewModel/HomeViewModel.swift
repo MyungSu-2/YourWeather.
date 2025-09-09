@@ -18,8 +18,14 @@ final class HomeViewModel {
         if let myLocation = UserDefaults.standard.string(forKey: "myLocation") {
             self.myLocation = myLocation
         }
+        if let myLocationKor = UserDefaults.standard.string(forKey: "myLocationKor") {
+            self.myLocationKor = myLocationKor
+        }
         if let selectedLocation = UserDefaults.standard.string(forKey: "selectedLocation") {
             self.selectedLocation = selectedLocation
+        }
+        if let selectedLocationKor = UserDefaults.standard.string(forKey: "selectedLocationKor") {
+            self.selectedLocationKor = selectedLocationKor
         }
     }
 }
