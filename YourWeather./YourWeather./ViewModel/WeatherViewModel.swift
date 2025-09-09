@@ -34,11 +34,11 @@ class WeatherViewModel {
     func saveWeatherToSharedDefaults(to destination: Bool) {
         let sharedDefaults = UserDefaults(suiteName: "group.com.YourWeather_")
         switch destination {
-        case true:
+        case false:
             if let encoded = try? JSONEncoder().encode(weatherData) {
                 sharedDefaults?.set(encoded, forKey: "myWeatherData")
             }
-        case false:
+        case true:
             if let encoded = try? JSONEncoder().encode(weatherData) {
                 sharedDefaults?.set(encoded, forKey: "selectedWeatherData")
             }

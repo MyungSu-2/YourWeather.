@@ -20,44 +20,51 @@ struct Provider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [WeatherEntry] = []
-        let weatherDatas: [OWMWeather] = loadWeatherData()
-        if weatherDatas.count < 2 {
-            entries.append(WeatherEntry())
-            
-            let timeline = Timeline(entries: entries, policy: .atEnd)
-            completion(timeline)
-        } else {
-            
-            let entry = WeatherEntry(date: Date(), location1: weatherDatas[0].name, weatherDescription1: weatherDatas[0].weather.first!.description, temperature1: String(format: "%.1f", weatherDatas[0].main.temp), minTemp1: String(format: "%.1f", weatherDatas[0].main.temp_min), maxTemp1: String(format: "%.1f", weatherDatas[0].main.temp_max), location2: weatherDatas[1].name, weatherDescription2: weatherDatas[1].weather.first!.description, temperature2: String(format: "%.1f", weatherDatas[1].main.temp), minTemp2: String(format: "%.1f", weatherDatas[1].main.temp_min), maxTemp2: String(format: "%.1f", weatherDatas[1].main.temp_max))
-            
+        let myWeatherData = loadMyWeatherData()
+        let selectedWeatherData = loadSelectedWeatherData()
+        
+        if let myData = myWeatherData, let selectedData = selectedWeatherData {
+            let entry = WeatherEntry(date: Date(), location1: myData.name, weatherDescription1: myData.weather.first!.description, temperature1: String(format: "%.1f", myData.main.temp), minTemp1: String(format: "%.1f", myData.main.temp_min), maxTemp1: String(format: "%.1f", myData.main.temp_max), location2: selectedData.name, weatherDescription2: selectedData.weather.first!.description, temperature2: String(format: "%.1f", selectedData.main.temp), minTemp2: String(format: "%.1f", selectedData.main.temp_min), maxTemp2: String(format: "%.1f", selectedData.main.temp_max))
             entries.append(entry)
-            
-            let timeline = Timeline(entries: entries, policy: .atEnd)
-            completion(timeline)
+        } else {
+            let entry = WeatherEntry()
+            entries.append(entry)
         }
+        
+        let timeline = Timeline(entries: entries, policy: .atEnd)
+        completion(timeline)
+        
     }
     
-    func loadWeatherData() -> [OWMWeather] {
+    func loadMyWeatherData() -> OWMWeather? {
         let appGroupID = "group.com.YourWeather_"
         let sharedDefaults = UserDefaults(suiteName: appGroupID)!
         
-        var weatherDataArray: [OWMWeather] = []
         do {
             if let data = sharedDefaults.data(forKey: "myWeatherData") {
                 let weatherData = try JSONDecoder().decode(OWMWeather.self, from: data)
-                weatherDataArray.append(weatherData)
-                print("!!!!!")
+                return weatherData
             }
-            
+            return nil
+        } catch {
+            print("Error with load my weather data: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    func loadSelectedWeatherData() -> OWMWeather? {
+        let appGroupID = "group.com.YourWeather_"
+        let sharedDefaults = UserDefaults(suiteName: appGroupID)!
+        
+        do {
             if let data = sharedDefaults.data(forKey: "selectedWeatherData") {
                 let weatherData = try JSONDecoder().decode(OWMWeather.self, from: data)
-                weatherDataArray.append(weatherData)
-                print("???????")
+                return weatherData
             }
-            return weatherDataArray
+            return nil
         } catch {
-            print("Error with load weather data: \(error.localizedDescription)")
-            return []
+            print("Error with load selected weather data: \(error.localizedDescription)")
+            return nil
         }
     }
 
@@ -110,6 +117,7 @@ struct WeatherWidgetEntryView : View {
         case .systemMedium:
             HStack {
                 VStack {
+                    Text("!!")
                     Text(entry.location1)
                     Text(entry.temperature1)
                     Text(entry.weatherDescription1)
@@ -117,6 +125,7 @@ struct WeatherWidgetEntryView : View {
                 .padding()
                 Spacer()
                 VStack {
+                    Text("??")
                     Text(entry.location2)
                     Text(entry.temperature2)
                     Text(entry.weatherDescription2)

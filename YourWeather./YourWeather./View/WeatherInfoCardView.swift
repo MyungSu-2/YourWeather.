@@ -70,18 +70,21 @@ struct WeatherInfoCardView: View {
                 }
             }
         }
-        .onChange(of: location) {
-            if let location = location {
-                viewModel.cityName = location
-                viewModel.saveWeatherToSharedDefaults(to: weatherInfoFlag)
-                WidgetCenter.shared.reloadAllTimelines()
-            }
-        }
+//        .onChange(of: location) {
+//            print("!!!location changed")
+//            if let location = location {
+//                viewModel.cityName = location
+//                viewModel.saveWeatherToSharedDefaults(to: weatherInfoFlag)
+//                WidgetCenter.shared.reloadAllTimelines()
+//            }
+//        }
         .onAppear {
             if let location = location {
                 viewModel.cityName = location
                 viewModel.saveWeatherToSharedDefaults(to: weatherInfoFlag)
-                WidgetCenter.shared.reloadAllTimelines()
+                if weatherInfoFlag == true {
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
             }
         }
     }
