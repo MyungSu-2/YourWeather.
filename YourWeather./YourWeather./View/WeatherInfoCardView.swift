@@ -11,9 +11,12 @@ import SwiftUI
 // 개별 지역의 날씨 정보를 표시하는 뷰
 struct WeatherInfoCardView: View {
     @Binding var location: String?
+    @Binding var locationKor: String?
+    @State var viewModel: WeatherViewModel = WeatherViewModel()
+    
     var body: some View {
         NavigationLink {
-            LocationSearchingView(location: $location)
+            LocationSearchingView(location: $location, locationKor: $locationKor)
         } label: {
             if location == nil {
                 Text("지역 선택")
@@ -26,44 +29,57 @@ struct WeatherInfoCardView: View {
                     .background(.gray.opacity(0.2))
                     .cornerRadius(20)
             } else {
-                VStack {
-                    HStack(alignment: .top) {
-                        Text("서울특별시")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.primary)
+                if let weatherData = viewModel.weatherData {
+                    VStack {
+                        HStack(alignment: .top) {
+                            Text("\(locationKor ?? "알 수 없음")")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Text("\(String(format: "%.1f", weatherData.main.temp))℃")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.primary)
+                        }
                         Spacer()
-                        Text("28℃")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.primary)
+                        HStack(alignment: .bottom) {
+                            Text("\(weatherData.weather.first!.description.capitalized)")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Text("최고: \(String(format: "%.1f", weatherData.main.temp_max))℃")
+                                .foregroundStyle(.primary)
+                            Text("최저: \(String(format: "%.1f", weatherData.main.temp_min))℃")
+                                .foregroundStyle(.primary)
+                        }
                     }
-                    Spacer()
-                    HStack(alignment: .bottom) {
-                        Text("흐림")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.primary)
-                        Spacer()
-                        Text("최고: 31℃")
-                            .foregroundStyle(.primary)
-                        Text("최저: 20℃")
-                            .foregroundStyle(.primary)
+                    .padding()
+                    .frame(width: .infinity, height: 150)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(20)
+                } else {
+                    VStack {
+                        Text(locationKor ?? "알 수 없음")
+                        Text("날씨 정보 없음")
                     }
+                    .foregroundColor(.black)
                 }
-                .padding()
-                .frame(width: .infinity, height: 150)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(20)
+            }
+        }
+        .onChange(of: location) {
+            if let location = location {
+                viewModel.cityName = location
             }
         }
     }
 }
 
 #Preview {
-    WeatherInfoCardView(location: .constant("서울특별시"))
+    WeatherInfoCardView(location: .constant("Seoul"), locationKor: .constant("서울특별시"))
 }
 
 #Preview {
-    WeatherInfoCardView(location: .constant(nil))
+    WeatherInfoCardView(location: .constant(nil), locationKor: .constant(nil))
 }

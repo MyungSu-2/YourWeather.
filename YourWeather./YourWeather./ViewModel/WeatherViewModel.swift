@@ -10,7 +10,6 @@ import CoreLocation
 
 @Observable
 class WeatherViewModel {
-    
     var weatherData: OWMWeather?
     var cityName: String = "" {
         didSet {
@@ -18,8 +17,12 @@ class WeatherViewModel {
         }
     }
     
-    init(cityName: String) {
+    init(cityName: String = "Seoul") {
         fetchWeatherData(for: cityName)
+    }
+    
+    init() {
+        
     }
     
     func fetchWeatherData(for cityName: String) {

@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - 앱 메인 화면
 struct HomeView: View {
     @State var viewModel: HomeViewModel = HomeViewModel()
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -20,7 +21,7 @@ struct HomeView: View {
                         .fontWeight(.bold)
                     Spacer()
                 }
-                WeatherInfoCardView(location: $viewModel.myLocation)
+                WeatherInfoCardView(location: $viewModel.myLocation, locationKor: $viewModel.myLocationKor)
                 Divider()
                     .padding(.vertical, 10)
                 
@@ -31,7 +32,7 @@ struct HomeView: View {
                         .fontWeight(.bold)
                     Spacer()
                 }
-                WeatherInfoCardView(location: $viewModel.selectedLocation)
+                WeatherInfoCardView(location: $viewModel.selectedLocation, locationKor: $viewModel.selectedLocationKor)
                 Spacer()
             }
             .padding()

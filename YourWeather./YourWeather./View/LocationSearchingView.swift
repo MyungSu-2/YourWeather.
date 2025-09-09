@@ -13,6 +13,7 @@ import MapKit
 struct LocationSearchingView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var location: String?
+    @Binding var locationKor: String?
     @State private var searchText = ""
     @State private var searchResults: [MKMapItem] = []
     
@@ -30,6 +31,7 @@ struct LocationSearchingView: View {
                         Task {
                             let english = await getEnglishPlaceName(for: item.placemark.location!)
                             location = english.city
+                            locationKor = item.placemark.locality ?? item.name
                             dismiss()
                         }
                     } label: {
