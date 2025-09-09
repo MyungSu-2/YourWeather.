@@ -39,3 +39,4 @@ Packages/
 # vim 등 편집기에서 생성하는 임시 파일
 *.swp
 *.swo
+YourWeather./YourWeather./Manager/SecretManager.swift
