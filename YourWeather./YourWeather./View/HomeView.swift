@@ -36,6 +36,12 @@ struct HomeView: View {
             }
             .padding()
             .foregroundColor(.primary)
+            .onChange(of: viewModel.myLocation) {
+                UserDefaults.standard.set(viewModel.myLocation, forKey: "myLocation")
+            }
+            .onChange(of: viewModel.selectedLocation) {
+                UserDefaults.standard.set(viewModel.selectedLocation, forKey: "selectedLocation")
+            }
         }
     }
 }
