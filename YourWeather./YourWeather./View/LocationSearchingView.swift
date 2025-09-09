@@ -6,16 +6,67 @@
 //
 
 import SwiftUI
+import MapKit
 
 // MARK: - 지역 검색 뷰
 // 날씨를 표시할 지역을 검색하여 선택하는 뷰
 struct LocationSearchingView: View {
+    @Environment(\.dismiss) var dismiss
     @Binding var location: String?
+    @State private var searchText = ""
+    @State private var searchResults: [MKMapItem] = []
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            if searchResults.isEmpty {
+                Text("원하는 도시를 검색하세요.")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.gray.opacity(0.7))
+            } else {
+                List(searchResults, id: \.self) { item in
+                    Button {
+                        searchText = ""
+                        location = item.placemark.locality ?? item.name
+                        dismiss()
+                    } label: {
+                        HStack {
+                            Text(item.placemark.locality ?? item.name ?? "알 수 없음")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Text(item.placemark.country ?? "알 수 없음")
+                                .foregroundColor(.gray.opacity(0.7))
+                        }
+                    }
+                }
+            }
+        }
+        .searchable(text: $searchText, prompt: "도시 이름 검색")
+        .onChange(of: searchText) {
+            Task {
+                await searchCity(for: searchText)
+            }
+        }
+    }
+    
+    private func searchCity(for text: String) async {
+        guard !text.isEmpty else { return }
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = text
+        request.resultTypes = [.address]
+        
+        let search = MKLocalSearch(request: request)
+        do {
+            let response = try await search.start()
+            DispatchQueue.main.async {
+                self.searchResults = response.mapItems
+            }
+        } catch {
+            print("검색 오류: \(error.localizedDescription)")
+        }
     }
 }
 
 #Preview {
-    LocationSearchingView(location: .constant(""))
+    HomeView()
 }
