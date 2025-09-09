@@ -27,8 +27,11 @@ struct LocationSearchingView: View {
                 List(searchResults, id: \.self) { item in
                     Button {
                         searchText = ""
-                        location = item.placemark.locality ?? item.name
-                        dismiss()
+                        Task {
+                            let english = await getEnglishPlaceName(for: item.placemark.location!)
+                            location = english.city
+                            dismiss()
+                        }
                     } label: {
                         HStack {
                             Text(item.placemark.locality ?? item.name ?? "알 수 없음")
@@ -64,6 +67,16 @@ struct LocationSearchingView: View {
         } catch {
             print("검색 오류: \(error.localizedDescription)")
         }
+    }
+    
+    private func getEnglishPlaceName(for location: CLLocation) async -> (city: String, country: String) {
+        let geocoder = CLGeocoder()
+        let placemarks = try? await geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "en_US"))
+        let placemark = placemarks?.first
+        
+        let city = placemark?.locality ?? placemark?.name ?? "Unknown"
+        let country = placemark?.country ?? "Unknown"
+        return (city, country)
     }
 }
 
