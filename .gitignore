@@ -1,62 +1,41 @@
-# Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+#===========================
+# Xcode 관련 무시 파일들
+#===========================
 
-## User settings
+# 빌드 결과물 (Xcode가 생성)
+build/
+
+# 파생 데이터 (컴파일 캐시 등, 자동 생성됨)
+DerivedData/
+
+# 사용자 설정 파일 (개인마다 다름, 충돌 방지)
+*.xcuserstate
 xcuserdata/
 
-## Obj-C/Swift specific
-*.hmap
+# 사용자 별 UI 상태 (편집기 탭 등 개인화된 설정)
+*.xcworkspace/xcuserdata/
 
-## App packaging
-*.ipa
-*.dSYM.zip
-*.dSYM
+# 사용자 작업 공간 (개인 설정, 공유 불필요)
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
 
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
+# SwiftUI 미리보기 관련 캐시
+PreviewContent/
 
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
-# *.xcodeproj
-#
-# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
-# hence it is not needed unless you have added a package configuration file to your project
-# .swiftpm
-
+# Swift 패키지 매니저가 생성하는 디렉토리
+.swiftpm/
 .build/
+Packages/
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+#===========================
+# 기타 무시 파일들
+#===========================
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
+# macOS에서 생성하는 숨김 파일
+.DS_Store
 
-Carthage/Build/
-
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
-
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/**/*.png
-fastlane/test_output
+# vim 등 편집기에서 생성하는 임시 파일
+*.swp
+*.swo
